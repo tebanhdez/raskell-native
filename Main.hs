@@ -88,8 +88,7 @@ server home notes =
 ----
 
 data Track = Track
-    { trackId :: Text
-    , timeStamp :: Text
+    { timeStamp :: Text
     }
   deriving (Generic, Show)
 
@@ -97,7 +96,7 @@ instance ToJSON Track
 
 
 newtype PostTrack = PostTrack
-    { postContents :: Text
+    { tracksContents :: Text
     }
   deriving Show
 
@@ -118,10 +117,9 @@ postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       iso <- getISO8601DateTime
-      T.putStrLn $ T.concat [iso, " ", postContents post]
+      T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
-            { trackId = postContents post,
-              timeStamp = iso
+            { timeStamp = iso
             }
       atomically $ do
         oldTracks <- readTVar tracks
@@ -159,5 +157,5 @@ main = do
                  lookup "TUTORIAL_HOME" env
     notes <- emptyNotes
     run port $ serve noteAPI $ server home notes
-    --tracks <- emptyTracks
-    --run port $ serve trackAPI $ serverTrack home tracks
+    tracks <- emptyTracks
+    run port $ serve trackAPI $ serverTrack home tracks
