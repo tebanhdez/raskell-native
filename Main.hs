@@ -135,15 +135,21 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
-postTrack :: MonadIO m => Response
+postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Response]
 postTrack tracks post =
     liftIO $ do
+      T.putStrLn $ T.concat [tracksContents post]
       let response = Response
             {
               requestId = "1",
-              matches = "ChangeTypeToList"
+              matches = "change"
             }
-      return response
+      atomically $ do
+        oldTracks <- readTVar tracks
+        --let newTracks = track : oldTracks
+        --writeTVar tracks newTracks
+        
+        return response
 
 
 type TrackAPI =
