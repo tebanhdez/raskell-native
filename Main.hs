@@ -87,10 +87,19 @@ server home notes =
 -- Tracks
 ----
 
+data Match = Match
+    { 
+    title :: Text,
+    probability :: Float
+    }
+  deriving (Generic, Show)
+
+instance ToJSON Match
+
 data Track = Track
     { 
     requestId :: Text,
-    matches :: [Text]
+    matches :: [Match]
     }
   deriving (Generic, Show)
 
@@ -122,7 +131,7 @@ postTrack tracks post =
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
             { requestId = tracksContents post,
-              matches = ["match1","match2"]
+              matches = [Match {title = "title1", probability = 0.5}]
             }
       atomically $ do
         oldTracks <- readTVar tracks
