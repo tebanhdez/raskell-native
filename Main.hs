@@ -135,7 +135,7 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
-postTrack :: MonadIO m => Response
+postTrack :: MonadIO m => m Response
 postTrack tracks post =
     liftIO $ do
       let response = Response
