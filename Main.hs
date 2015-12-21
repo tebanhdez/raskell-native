@@ -110,8 +110,8 @@ instance ToJSON Match
 
 data Response = Response
     {
-      RequestId :: Text,
-      Matches :: []
+      requestId :: Text,
+      matches :: []
     }
     deriving (Generic, Show)
 
@@ -149,8 +149,8 @@ postTrack tracks post =
         writeTVar tracks newTracks
         let response = Response
             {
-              RequestId = "1",
-              Match = []
+              requestId = "1",
+              match = []
             }
         return response
 
