@@ -88,9 +88,8 @@ server home notes =
 ----
 
 data Track = Track
-    { 
-      trackId :: Text,
-      timeStamp :: Text
+    { trackId :: Text
+    , timeStamp :: Text
     }
   deriving (Generic, Show)
 
@@ -121,8 +120,7 @@ postTrack tracks post =
       iso <- getISO8601DateTime
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
-            {
-              trackId = tracksContents post,
+            { trackId = tracksContents post,
               timeStamp = iso
             }
       atomically $ do
@@ -159,7 +157,7 @@ main = do
     let port = maybe 8080 read $ lookup "PORT" env
         home = maybe "Welcome to Haskell on Heroku" T.pack $
                  lookup "TUTORIAL_HOME" env
-    --notes <- emptyNotes
-    --run port $ serve noteAPI $ server home notes
-    tracks <- emptyTracks
-    run port $ serve trackAPI $ serverTrack home tracks
+    notes <- emptyNotes
+    run port $ serve noteAPI $ server home notes
+    --tracks <- emptyTracks
+    --run port $ serve trackAPI $ serverTrack home tracks
