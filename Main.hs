@@ -136,9 +136,10 @@ postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       T.putStrLn $ T.concat [tracksContents post]
+      let requestId = tracksContents post
       let track = Track
             { requestId = tracksContents post,
-              matches = getMatches "1",
+              matches = getMatches requestId,
               performance = Performance {information = "some information here"}
             }
       atomically $ do
