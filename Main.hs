@@ -115,7 +115,7 @@ data Response = Response
     }
     deriving (Generic, Show)
 
-instance ToJSON Track
+instance ToJSON Response
 
 newtype PostTrack = PostTrack
     { tracksContents :: Text
