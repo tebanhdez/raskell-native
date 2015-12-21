@@ -88,6 +88,13 @@ server home notes =
 ----
 
 
+data NestedList a = Elem a | List [NestedList a]
+ 
+flatten :: NestedList a -> [a]
+flatten (Elem x) = [x]
+flatten (List x) = concatMap flatten x
+
+
 getMatches trackId = return [trackId] --Match {title = "title 1", probability = 0.5}                      
 
 data Match = Match
@@ -141,7 +148,7 @@ postTrack tracks post =
       let trackId = tracksContents post
       let track = Track
             { requestId = tracksContents post,
-              matches = head (getMatches trackId),
+              matches = flatten (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
       atomically $ do
