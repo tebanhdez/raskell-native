@@ -163,10 +163,10 @@ trackAPI =
     Proxy
 
 
-serverTrack :: Text -> TVar [Track] -> Server TrackAPI
+serverTrack :: Text -> TVar [Response] -> Server TrackAPI
 serverTrack home tracks =
          return home
-    :<|> getTracks tracks
+    --:<|> getTracks tracks
     :<|> postTrack tracks
 
 
