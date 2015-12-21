@@ -142,7 +142,7 @@ postTrack tracks post =
       let trackId = tracksContents post
       let track = Track
             { 
-              trackId = trackId 
+              trackId = trackId, 
               requestId = tracksContents post,
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
