@@ -12,6 +12,7 @@ import Servant
 import System.Environment
 import System.Hourglass
 import System.IO
+import Data.UUID
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -143,7 +144,7 @@ postTrack tracks post =
       let track = Track
             { 
               trackId = trackId,
-              requestId = tracksContents post,
+              requestId = nextUUID,
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
