@@ -87,7 +87,7 @@ server home notes =
 -- Tracks
 ----
 
-getMatches trackId = return Match {title = trackId, probability = 0.5}                      
+getMatches trackId = return [Match {title = trackId, probability = 0.5}]                     
 
 data Match = Match
     { 
