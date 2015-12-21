@@ -149,7 +149,7 @@ serverTrack :: Text -> TVar [Track] -> Server TrackAPI
 serverTrack home tracks =
          return home
     :<|> getTracks tracks
-    :<|> postTracks tracks
+    :<|> postTrack tracks
 
 
 
