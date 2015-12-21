@@ -105,7 +105,7 @@ instance ToJSON Performance
 data Track = Track
     { 
     requestId :: Text,
-    matches :: [Match]
+    matches :: [Match],
     performance :: Performance
     }
   deriving (Generic, Show)
