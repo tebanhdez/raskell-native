@@ -90,7 +90,6 @@ server home notes =
 data Track = Track
     { 
       trackId :: Text,
-      title :: Text,
       timeStamp :: Text
     }
   deriving (Generic, Show)
@@ -124,7 +123,6 @@ postTrack tracks post =
       let track = Track
             {
               trackId = tracksContents post,
-              title = tracksContents post,
               timeStamp = iso
             }
       atomically $ do
