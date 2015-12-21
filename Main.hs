@@ -88,7 +88,7 @@ server home notes =
 ----
 
 getMaches :: trackId -> [Match]
-getMaches trackId = return [Match{title = "example 1", probability = 0.5}]
+getMaches trackId = return Match{title = "example 1", probability = 0.5}
 
 
 data Match = Match
