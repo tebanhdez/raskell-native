@@ -90,7 +90,7 @@ server home notes =
 data Track = Track
     { 
     requestId :: Int,
-    matches :: [(title,probability)]
+    matches :: Text
     }
   deriving (Generic, Show)
 
@@ -122,10 +122,7 @@ postTrack tracks post =
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
             { requestId = tracksContents post,
-              matches = 
-                [
-                  ("title 1",0.5)
-                ]
+              matches = "listOfMatches"
             }
       atomically $ do
         oldTracks <- readTVar tracks
