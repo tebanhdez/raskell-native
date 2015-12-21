@@ -87,16 +87,10 @@ server home notes =
 -- Tracks
 ----
 
-data Match = Match
-    {
-      title :: Text,
-      probability :: Float
-    }
-
 data Track = Track
     { 
     requestId :: Int,
-    matches :: [Match]
+    matches :: [(title,probability)]
     }
   deriving (Generic, Show)
 
@@ -130,10 +124,7 @@ postTrack tracks post =
             { requestId = tracksContents post,
               matches = 
                 [
-                  {
-                    title = "test title",
-                    probability = 0.5
-                  }
+                  ("title 1",0.5)
                 ]
             }
       atomically $ do
