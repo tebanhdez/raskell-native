@@ -16,7 +16,6 @@ import System.IO
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
-import track
 
 getISO8601DateTime :: IO Text
 getISO8601DateTime = do
@@ -82,6 +81,91 @@ server home notes =
          return home
     :<|> getNotes notes
     :<|> postNote notes
+
+
+
+----
+-- Tracks
+----
+
+data Track = Track
+    { 
+      trackId :: Text
+    }
+  deriving (Generic, Show)
+
+instance ToJSON Track
+
+
+-- TODO
+data Match = Match
+    {
+      title :: Text,
+      probability :: Float
+    }
+
+data Response = Response
+    {
+      RequestId :: Text,
+      Matches :: []
+    }
+
+newtype PostTrack = PostTrack
+    { tracksContents :: Text
+    }
+  deriving Show
+
+instance FromJSON PostTrack where
+    parseJSON (Object o) = PostTrack <$> o .: "trackId"
+    parseJSON _          = mzero
+
+
+emptyTracks :: IO (TVar [Track])
+emptyTracks =
+    newTVarIO []
+
+getTracks :: MonadIO m => TVar [Track] -> m [Track]
+getTracks tracks =
+    liftIO $ readTVarIO tracks
+
+postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
+postTrack tracks post =
+    liftIO $ do
+      T.putStrLn $ T.concat [tracksContents post]
+      let track = Track
+            { 
+              trackId = tracksContents post
+            }
+      atomically $ do
+        oldTracks <- readTVar tracks
+        let newTracks = track : oldTracks
+        writeTVar tracks newTracks
+        let response = Response
+            {
+              RequestId = "1",
+              Match = []
+            }
+        return response
+
+
+type TrackAPI =
+         Get Text
+    :<|> "tracks" :> Get [Track]
+    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+
+
+trackAPI :: Proxy TrackAPI
+trackAPI =
+    Proxy
+
+
+serverTrack :: Text -> TVar [Track] -> Server TrackAPI
+serverTrack home tracks =
+         return home
+    :<|> getTracks tracks
+    :<|> postTrack tracks
+
+
 
 
 main :: IO ()
