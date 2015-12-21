@@ -141,7 +141,7 @@ postTrack tracks post =
       let trackId = tracksContents post
       let track = Track
             { requestId = tracksContents post,
-              matches = getMatches trackId,
+              matches = head (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
       atomically $ do
