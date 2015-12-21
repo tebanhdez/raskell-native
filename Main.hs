@@ -89,7 +89,9 @@ server home notes =
 
 data Track = Track
     { 
-    trackId :: Text
+    trackId :: String
+    title :: String
+    probability :: Float
     }
   deriving (Generic, Show)
 
@@ -120,7 +122,9 @@ postTrack tracks post =
       iso <- getISO8601DateTime
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
-            { trackId = tracksContents post
+            { trackId = tracksContents post,
+              title = "test title",
+              probability = 0.3
             }
       atomically $ do
         oldTracks <- readTVar tracks
