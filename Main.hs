@@ -90,7 +90,7 @@ server home notes =
 data Track = Track
     { 
     requestId :: Text,
-    matches :: Text
+    matches :: [Text]
     }
   deriving (Generic, Show)
 
@@ -103,7 +103,7 @@ newtype PostTrack = PostTrack
   deriving Show
 
 instance FromJSON PostTrack where
-    parseJSON (Object o) = PostTrack <$> o .: "trackId"
+    parseJSON (Object o) = PostTrack <$> o .: "requestId"
     parseJSON _          = mzero
 
 
@@ -122,7 +122,7 @@ postTrack tracks post =
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
             { requestId = tracksContents post,
-              matches = "listOfMatches"
+              matches = ["match1","match2"]
             }
       atomically $ do
         oldTracks <- readTVar tracks
