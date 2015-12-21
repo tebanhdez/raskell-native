@@ -111,7 +111,7 @@ instance ToJSON Match
 data Response = Response
     {
       requestId :: Text,
-      matches :: [Match]
+      matches :: Text
     }
     deriving (Generic, Show)
 
@@ -135,24 +135,14 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
-postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
+postTrack :: MonadIO m => Response
 postTrack tracks post =
     liftIO $ do
-      T.putStrLn $ T.concat [tracksContents post]
-      let track = Track
-            { 
-              trackId = tracksContents post
-            }
       let response = Response
             {
               requestId = "1",
-              matches = []
+              matches = "ChangeTypeToList"
             }
-      atomically $ do
-        oldTracks <- readTVar tracks
-        let newTracks = track : oldTracks
-        writeTVar tracks newTracks
-        
         return response
 
 
