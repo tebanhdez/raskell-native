@@ -15,6 +15,7 @@ import System.IO
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
+import qualified Data.List as L
 
 
 getISO8601DateTime :: IO Text
@@ -87,7 +88,8 @@ server home notes =
 -- Tracks
 ----
 
-getMatches trackId = return Match {title = trackId, probability = 0.5}                      
+
+getMatches trackId = return [] --Match {title = "title 1", probability = 0.5}                      
 
 data Match = Match
     { 
@@ -121,7 +123,7 @@ newtype PostTrack = PostTrack
   deriving Show
 
 instance FromJSON PostTrack where
-    parseJSON (Object o) = PostTrack <$> o .: "requestId"
+    parseJSON (Object o) = PostTrack <$> o .: "trackId"
     parseJSON _          = mzero
 
 
@@ -139,8 +141,9 @@ postTrack tracks post =
       T.putStrLn $ T.concat [tracksContents post]
       let trackId = tracksContents post
       let track = Track
-            { requestId = tracksContents post,
-              matches = getMatches trackId,
+            { 
+              requestId = tracksContents post,
+              matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
       atomically $ do
