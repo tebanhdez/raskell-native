@@ -89,7 +89,7 @@ server home notes =
 ----
 
 
-getMatches trackId = return [] --Match {title = "title 1", probability = 0.5}                      
+getMatches trackId = return Match {title = "title 1", probability = 0.5}                      
 
 data Match = Match
     { 
@@ -142,9 +142,8 @@ postTrack tracks post =
       let trackId = tracksContents post
       let track = Track
             { 
-              trackId = trackId, 
               requestId = tracksContents post,
-              matches = L.concat (getMatches trackId),
+              matches = getMatches trackId,
               performance = Performance {information = "some information here"}
             }
       atomically $ do
