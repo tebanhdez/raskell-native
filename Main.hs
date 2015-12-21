@@ -111,7 +111,7 @@ instance ToJSON Match
 data Response = Response
     {
       requestId :: Text,
-      matches :: []
+      matches :: [Match]
     }
     deriving (Generic, Show)
 
