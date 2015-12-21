@@ -87,11 +87,16 @@ server home notes =
 -- Tracks
 ----
 
+data Match = Match
+    {
+      title :: Text,
+      probability :: Float
+    }
+
 data Track = Track
     { 
-    trackId :: Text,
-    title :: Text,
-    probability :: Float
+    requestId :: Int,
+    matches :: [Match]
     }
   deriving (Generic, Show)
 
@@ -122,9 +127,14 @@ postTrack tracks post =
       iso <- getISO8601DateTime
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
-            { trackId = tracksContents post,
-              title = "test title",
-              probability = 0.3
+            { requestId = tracksContents post,
+              matches = 
+                [
+                  {
+                    title = "test title",
+                    probability = 0.5
+                  }
+                ]
             }
       atomically $ do
         oldTracks <- readTVar tracks
