@@ -83,6 +83,77 @@ server home notes =
     :<|> postNote notes
 
 
+----
+-- Tracks
+----
+
+data Track = Track
+    { 
+      trackId :: Text,
+      title :: Text,
+      timeStamp :: Text
+    }
+  deriving (Generic, Show)
+
+instance ToJSON Track
+
+
+newtype PostTrack = PostTrack
+    { postContents :: Text
+    }
+  deriving Show
+
+instance FromJSON PostTrack where
+    parseJSON (Object o) = PostTrack <$> o .: "contents"
+    parseJSON _          = mzero
+
+
+emptyTracks :: IO (TVar [Track])
+emptyTracks =
+    newTVarIO []
+
+getTracks :: MonadIO m => TVar [Track] -> m [Track]
+getNotes tracks =
+    liftIO $ readTVarIO tracks
+
+postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
+postTrack tracks post =
+    liftIO $ do
+      iso <- getISO8601DateTime
+      T.putStrLn $ T.concat [iso, " ", postContents post]
+      let track = Track
+            {
+              trackId = postContents post,
+              title = postContents post,
+              timeStamp = iso
+            }
+      atomically $ do
+        oldTracks <- readTVar tracks
+        let newTracks = tracks : oldTracks
+        writeTVar tracks newTracks
+        return newTracks
+
+
+type TrackAPI =
+         Get Text
+    :<|> "tracks" :> Get [Track]
+    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+
+
+trackAPI :: Proxy TrackAPI
+trackAPI =
+    Proxy
+
+
+server :: Text -> TVar [Track] -> Server TrackAPI
+server home tracks =
+         return home
+    :<|> getNotes tracks
+    :<|> postNote tracks
+
+
+
+
 main :: IO ()
 main = do
     hSetBuffering stdout LineBuffering
@@ -90,5 +161,7 @@ main = do
     let port = maybe 8080 read $ lookup "PORT" env
         home = maybe "Welcome to Haskell on Heroku" T.pack $
                  lookup "TUTORIAL_HOME" env
-    notes <- emptyNotes
-    run port $ serve noteAPI $ server home notes
+    --notes <- emptyNotes
+    --run port $ serve noteAPI $ server home notes
+    tracks <- emptyTracks
+    run port $ server trackAPI $ server home tracks
