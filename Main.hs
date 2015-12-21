@@ -15,6 +15,7 @@ import System.IO
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
+import qualified Data.List as L
 
 
 getISO8601DateTime :: IO Text
@@ -141,7 +142,7 @@ postTrack tracks post =
       let trackId = tracksContents post
       let track = Track
             { requestId = tracksContents post,
-              matches = concat (getMatches trackId),
+              matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
       atomically $ do
