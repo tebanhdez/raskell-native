@@ -101,7 +101,7 @@ newtype PostTrack = PostTrack
   deriving Show
 
 instance FromJSON PostTrack where
-    parseJSON (Object o) = PostTrack <$> o .: "contents"
+    parseJSON (Object o) = PostTrack <$> o .: "timeStamp"
     parseJSON _          = mzero
 
 
