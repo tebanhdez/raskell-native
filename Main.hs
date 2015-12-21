@@ -89,8 +89,8 @@ server home notes =
 
 data Track = Track
     { 
-    trackId :: String
-    title :: String
+    trackId :: String,
+    title :: String,
     probability :: Float
     }
   deriving (Generic, Show)
