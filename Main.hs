@@ -166,7 +166,6 @@ trackAPI =
 serverTrack :: Text -> TVar [Response] -> Server TrackAPI
 serverTrack home tracks =
          return home
-    --:<|> getTracks tracks
     :<|> postTrack tracks
 
 
