@@ -97,7 +97,7 @@ instance ToJSON Track
 
 
 newtype PostTrack = PostTrack
-    { tracksContents :: Text
+    { postContents :: Text
     }
   deriving Show
 
@@ -118,9 +118,9 @@ postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       iso <- getISO8601DateTime
-      T.putStrLn $ T.concat [iso, " ", tracksContents post]
+      T.putStrLn $ T.concat [iso, " ", postContents post]
       let track = Track
-            { trackId = tracksContents post,
+            { trackId = postContents post,
               timeStamp = iso
             }
       atomically $ do
