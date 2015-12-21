@@ -135,7 +135,7 @@ postTrack tracks post =
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
             { requestId = tracksContents post,
-              matches = [Match {title = "title1", probability = 0.5}]
+              matches = [getMaches tracksContents post]
             }
       atomically $ do
         oldTracks <- readTVar tracks
