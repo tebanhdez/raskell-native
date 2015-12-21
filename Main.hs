@@ -89,7 +89,7 @@ server home notes =
 
 data Track = Track
     { 
-    requestId :: Int,
+    requestId :: Text,
     matches :: Text
     }
   deriving (Generic, Show)
