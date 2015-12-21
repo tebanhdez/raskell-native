@@ -103,12 +103,19 @@ data Match = Match
       title :: Text,
       probability :: Float
     }
+    deriving (Generic, Show)
+
+instance ToJSON Match
+
 
 data Response = Response
     {
       RequestId :: Text,
       Matches :: []
     }
+    deriving (Generic, Show)
+
+instance ToJSON Track
 
 newtype PostTrack = PostTrack
     { tracksContents :: Text
