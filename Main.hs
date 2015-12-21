@@ -83,39 +83,18 @@ server home notes =
     :<|> postNote notes
 
 
-
 ----
 -- Tracks
 ----
 
 data Track = Track
     { 
-      trackId :: Text
+    trackId :: Text
     }
   deriving (Generic, Show)
 
 instance ToJSON Track
 
-
--- TODO
-data Match = Match
-    {
-      title :: Text,
-      probability :: Float
-    }
-    deriving (Generic, Show)
-
-instance ToJSON Match
-
-
-data Response = Response
-    {
-      requestId :: Text,
-      matches :: Text
-    }
-    deriving (Generic, Show)
-
-instance ToJSON Response
 
 newtype PostTrack = PostTrack
     { tracksContents :: Text
@@ -138,17 +117,16 @@ getTracks tracks =
 postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
-      T.putStrLn $ T.concat [tracksContents post]
+      iso <- getISO8601DateTime
+      T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
-            { 
-              trackId = tracksContents post
+            { trackId = tracksContents post
             }
       atomically $ do
         oldTracks <- readTVar tracks
         let newTracks = track : oldTracks
         writeTVar tracks newTracks
-        
-        return track
+        return newTracks
 
 
 type TrackAPI =
