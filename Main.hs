@@ -139,6 +139,7 @@ postTrack tracks post =
       T.putStrLn $ T.concat [iso, " ", tracksContents post]
       let track = Track
             { requestId = tracksContents post,
+              testField = tracksContents post,
               matches = getMatches "1",
               performance = Performance {information = "some information here"}
             }
