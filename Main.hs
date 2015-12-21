@@ -145,11 +145,11 @@ trackAPI =
     Proxy
 
 
-server :: Text -> TVar [Track] -> Server TrackAPI
-server home tracks =
+serverTrack :: Text -> TVar [Track] -> Server TrackAPI
+serverTrack home tracks =
          return home
-    :<|> getNotes tracks
-    :<|> postNote tracks
+    :<|> getTracks tracks
+    :<|> postTracks tracks
 
 
 
