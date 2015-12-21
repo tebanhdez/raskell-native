@@ -87,7 +87,7 @@ server home notes =
 -- Tracks
 ----
 
-getMatches trackId = return Match {title = trackId, probability = 0.5}                      
+getMatches trackId = return Match {title = "title1", probability = 0.5}                      
 
 data Match = Match
     { 
@@ -135,11 +135,10 @@ getTracks tracks =
 postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
-      iso <- getISO8601DateTime
-      T.putStrLn $ T.concat [iso, " ", tracksContents post]
+      T.putStrLn $ T.concat [tracksContents post]
       let track = Track
             { requestId = tracksContents post,
-              matches = getMatches requestId,
+              matches = getMatches "1",
               performance = Performance {information = "some information here"}
             }
       atomically $ do
