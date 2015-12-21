@@ -113,7 +113,7 @@ emptyTracks =
     newTVarIO []
 
 getTracks :: MonadIO m => TVar [Track] -> m [Track]
-getNotes tracks =
+getTracks tracks =
     liftIO $ readTVarIO tracks
 
 postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
