@@ -135,21 +135,20 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
-postTrack :: MonadIO m => TVar [Response] -> PostTrack -> m [Response]
+postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       T.putStrLn $ T.concat [tracksContents post]
-      let response = Response
-            {
-              requestId = "1",
-              matches = "change"
+      let track = Track
+            { 
+              trackId = tracksContents post
             }
       atomically $ do
         oldTracks <- readTVar tracks
-        --let newTracks = track : oldTracks
-        --writeTVar tracks newTracks
+        let newTracks = track : oldTracks
+        writeTVar tracks newTracks
         
-        return response
+        return track
 
 
 type TrackAPI =
@@ -163,9 +162,10 @@ trackAPI =
     Proxy
 
 
-serverTrack :: Text -> TVar [Response] -> Server TrackAPI
+serverTrack :: Text -> TVar [Track] -> Server TrackAPI
 serverTrack home tracks =
          return home
+    :<|> getTracks tracks
     :<|> postTrack tracks
 
 
