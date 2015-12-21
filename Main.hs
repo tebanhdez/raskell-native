@@ -143,15 +143,16 @@ postTrack tracks post =
             { 
               trackId = tracksContents post
             }
-      atomically $ do
-        oldTracks <- readTVar tracks
-        let newTracks = track : oldTracks
-        writeTVar tracks newTracks
-        let response = Response
+      let response = Response
             {
               requestId = "1",
               match = []
             }
+      atomically $ do
+        oldTracks <- readTVar tracks
+        let newTracks = track : oldTracks
+        writeTVar tracks newTracks
+        
         return response
 
 
