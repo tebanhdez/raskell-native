@@ -164,4 +164,4 @@ main = do
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
-    run port $ server trackAPI $ serverTrack home tracks
+    run port $ serve trackAPI $ serverTrack home tracks
