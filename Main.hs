@@ -87,7 +87,7 @@ server home notes =
 -- Tracks
 ----
 
-getMatches trackId = return Match {title = trackId, probability = 0.5} ++ Match {title = trackId, probability = 0.3}                      
+getMatches trackId = return [] --Match {title = "title 1", probability = 0.5}                      
 
 data Match = Match
     { 
@@ -106,6 +106,7 @@ instance ToJSON Performance
 
 data Track = Track
     { 
+    trackId :: Text,
     requestId :: Text,
     matches :: [Match],
     performance :: Performance
@@ -136,10 +137,10 @@ postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       T.putStrLn $ T.concat [tracksContents post]
-      let requestId = tracksContents post
+      let trackId = tracksContents post
       let track = Track
             { requestId = tracksContents post,
-              matches = getMatches requestId,
+              matches = getMatches trackId,
               performance = Performance {information = "some information here"}
             }
       atomically $ do
