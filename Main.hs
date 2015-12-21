@@ -141,7 +141,9 @@ postTrack tracks post =
       T.putStrLn $ T.concat [tracksContents post]
       let trackId = tracksContents post
       let track = Track
-            { requestId = tracksContents post,
+            { 
+              trackId = trackId 
+              requestId = tracksContents post,
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
