@@ -155,7 +155,7 @@ main = do
     let port = maybe 8080 read $ lookup "PORT" env
         home = maybe "Welcome to Haskell on Heroku" T.pack $
                  lookup "TUTORIAL_HOME" env
-    notes <- emptyNotes
-    run port $ serve noteAPI $ server home notes
+    --notes <- emptyNotes
+    --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
     run port $ serve trackAPI $ serverTrack home tracks
