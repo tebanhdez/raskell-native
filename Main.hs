@@ -13,6 +13,9 @@ import System.Environment
 import System.Hourglass
 import System.IO
 
+import Data.UUID as U
+import qualified Data.UUID.V4 as U4
+
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -92,6 +95,9 @@ server home notes =
 
 getMatches trackId = return [Match {title = "title 1", probability = 0.5},Match {title = "title 2", probability = 0.3}]                     
 
+getUUID = do (y <- U4.nextRandom
+    return (U.toString y))
+
 data Match = Match
     { 
     title :: Text,
@@ -144,7 +150,7 @@ postTrack tracks post =
       let track = Track
             { 
               trackId = trackId,
-              requestId = X-Request-ID,
+              requestId = tracksContents post,
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
