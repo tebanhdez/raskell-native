@@ -117,14 +117,6 @@ data Track = Track
 instance ToJSON Track
 
 
-data Song = Song
-    { 
-    songTitle :: Text
-    }
-  deriving (Generic, Show)
-instance ToJSON Song
-
-
 newtype PostTrack = PostTrack
     { tracksContents :: Text
     }
@@ -135,13 +127,13 @@ instance FromJSON PostTrack where
     parseJSON _          = mzero
 
 
-emptySongs :: IO (TVar [Song])
-emptySongs =
+emptyTracks :: IO (TVar [Track])
+emptyTracks =
     newTVarIO []
 
-getSongs :: MonadIO m => TVar [Song] -> m [Song]
-getSongs songs =
-    liftIO $ readTVarIO songs
+getTracks :: MonadIO m => TVar [Track] -> m [Track]
+getTracks tracks =
+    liftIO $ readTVarIO tracks
 
 postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
@@ -158,13 +150,13 @@ postTrack tracks post =
       atomically $ do
         oldTracks <- readTVar tracks
         let newTracks = track : oldTracks
-        writeTVar tracks oldTracks
+        writeTVar tracks newTracks
         return newTracks
 
 
 type TrackAPI =
          Get Text
-    :<|> "tracks" :> Get [Song]
+    :<|> "tracks" :> Get [Track]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
 
 
@@ -189,7 +181,7 @@ main = do
     let port = maybe 8080 read $ lookup "PORT" env
         home = maybe "Welcome to Haskell on Heroku" T.pack $
                  lookup "TUTORIAL_HOME" env
-    --notes <- emptyNotes
-    --run port $ serve noteAPI $ server home notes
+    notes <- emptyNotes
+    run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
     run port $ serve trackAPI $ serverTrack home tracks
