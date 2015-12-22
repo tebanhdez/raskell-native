@@ -84,15 +84,6 @@ server home notes =
     :<|> postNote notes
 
 
-
-----
--- Index
-----
-
-
-
-
-
 ----
 -- Tracks
 ----
@@ -126,6 +117,14 @@ data Track = Track
 instance ToJSON Track
 
 
+data Song = Song
+    { 
+    title :: Text
+    }
+  deriving (Generic, Show)
+instance ToJSON Song
+
+
 newtype PostTrack = PostTrack
     { tracksContents :: Text
     }
@@ -136,13 +135,13 @@ instance FromJSON PostTrack where
     parseJSON _          = mzero
 
 
-emptyTracks :: IO (TVar [Track])
-emptyTracks =
+emptySongs :: IO (TVar [Song])
+emptySongs =
     newTVarIO []
 
-getTracks :: MonadIO m => TVar [Track] -> m [Track]
-getTracks tracks =
-    liftIO $ readTVarIO tracks
+getSongs :: MonadIO m => TVar [Song] -> m [Song]
+getSongs songs =
+    liftIO $ readTVarIO songs
 
 postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
@@ -152,7 +151,7 @@ postTrack tracks post =
       let track = Track
             { 
               trackId = trackId,
-              requestId = "1234-1234-1234",
+              requestId = "1234-ABCD-1234",
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
@@ -162,31 +161,16 @@ postTrack tracks post =
         writeTVar tracks oldTracks
         return newTracks
 
-data Song = Song
-  {
-    title :: Text
-  }
-  deriving (Generic, Show)
-instance ToJSON Song
 
 type TrackAPI =
          Get Text
-    :<|> "tracks" :> Get [Track]
+    :<|> "tracks" :> Get [Song]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
-    :<|> "getSongList" :> Get [Song]
 
 
 trackAPI :: Proxy TrackAPI
 trackAPI =
     Proxy
-
-emptySongs :: IO (TVar [Song])
-emptySongs =
-    newTVarIO []
-
-getSongs :: MonadIO m => TVar [Song] -> m [Song]
-getSongs songs =
-    liftIO $ readTVarIO songs
 
 
 serverTrack :: Text -> TVar [Track] -> Server TrackAPI
@@ -194,7 +178,6 @@ serverTrack home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
-    :<|> getSongList songs
 
 
 
