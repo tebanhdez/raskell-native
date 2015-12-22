@@ -216,11 +216,11 @@ trackAPI =
 
 
 serverTrack :: Text -> TVar [Track] -> Server TrackAPI
-serverTrack home tracks =
+serverTrack home tracks songs =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
-    :<|> getSongs tracks
+    :<|> getSongs songs
 
 
 
@@ -234,5 +234,6 @@ main = do
                  lookup "TUTORIAL_HOME" env
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
+    songs <- emptySong
     tracks <- emptyTracks
-    run port $ serve trackAPI $ serverTrack home tracks
+    run port $ serve trackAPI $ serverTrack home tracks songs
