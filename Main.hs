@@ -135,7 +135,7 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
-postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m Track
+postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       T.putStrLn $ T.concat [tracksContents post]
@@ -147,7 +147,10 @@ postTrack tracks post =
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
-      return track
+      atomically $ do
+        let newTracks = track
+        writeTVar tracks newTracks
+        return newTracks
 
 
 type TrackAPI =
