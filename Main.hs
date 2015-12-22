@@ -147,7 +147,7 @@ postTrack tracks post =
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
-      return newTracks
+      return track
 
 
 type TrackAPI =
