@@ -135,6 +135,24 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
+postRequest :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
+postRequest tracks post =
+    liftIO $ do
+      T.putStrLn $ T.concat [tracksContents post]
+      let trackId = tracksContents post
+      let track = Track
+            { 
+              trackId = trackId,
+              requestId = "1234-1234-1234",
+              matches = L.concat (getMatches trackId),
+              performance = Performance {information = "some information here"}
+            }
+      atomically $ do
+        oldTracks <- readTVar tracks
+        let newTracks = track : oldTracks
+        writeTVar tracks oldTracks
+        return newTracks
+
 postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
@@ -150,7 +168,7 @@ postTrack tracks post =
       atomically $ do
         oldTracks <- readTVar tracks
         let newTracks = track : oldTracks
-        writeTVar tracks oldTracks
+        writeTVar tracks newTracks
         return newTracks
 
 
@@ -170,6 +188,7 @@ serverTrack home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
+    :<|> postRequest tracks
 
 
 
