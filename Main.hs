@@ -143,7 +143,7 @@ postTrack tracks post =
       let track = Track
             { 
               trackId = trackId,
-              requestId = "1234-ABCD-1234",
+              requestId = "1234-1234-1234",
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
@@ -165,7 +165,7 @@ trackAPI =
     Proxy
 
 
-serverTrack :: Server TrackAPI
+serverTrack :: Text -> TVar [Track] -> Server TrackAPI
 serverTrack home tracks =
          return home
     :<|> getTracks tracks
