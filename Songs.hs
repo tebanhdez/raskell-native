@@ -55,10 +55,10 @@ postSong :: MonadIO m => TVar [Song] -> PostSong -> m [Song]
 postSong songs post =
     liftIO $ do
       iso <- getISO8601DateTime
-      T.putStrLn $ T.concat [iso, " ", postContents post]
+      T.putStrLn $ T.concat [iso, " ", songsContents post]
       let song = Song
-            { songTitle = postContents post,
-              artist = postContents post,
+            { songTitle = songsContents post,
+              artist = songsContents post,
               timeStamp = iso
             }
       atomically $ do
