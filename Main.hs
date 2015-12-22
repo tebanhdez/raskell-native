@@ -139,7 +139,7 @@ postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
 postTrack tracks post =
     liftIO $ do
       T.putStrLn $ T.concat [tracksContents post]
-      let trackId = post
+      let trackId = tracksContents post
       let track = Track
             { 
               trackId = trackId,
@@ -150,7 +150,7 @@ postTrack tracks post =
       atomically $ do
         oldTracks <- readTVar tracks
         let newTracks = track : oldTracks
-        writeTVar tracks newTracks
+        writeTVar tracks oldTracks
         return newTracks
 
 
