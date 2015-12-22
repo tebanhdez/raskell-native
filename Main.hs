@@ -154,60 +154,10 @@ postTrack tracks post =
         return newTracks
 
 
-
-
-
-
-
-data Song = Song
-    { 
-    songTitle :: Text
-    }
-  deriving (Generic, Show)
-instance ToJSON Song
-
-
-newtype PostSong = PostSong
-    { songsContents :: Text
-    }
-  deriving Show
-
-instance FromJSON PostSong where
-    parseJSON (Object o) = PostSong <$> o .: "songTitle"
-    parseJSON _          = mzero
-
-
-emptySong :: IO (TVar [Song])
-emptySong =
-    newTVarIO []
-
-getSongs :: MonadIO m => TVar [Song] -> m [Song]
-getSongs songs =
-    liftIO $ readTVarIO songs
-
-postSong :: MonadIO m => TVar [Song] -> PostSong -> m [Song]
-postSong songs post =
-    liftIO $ do
-      T.putStrLn $ T.concat [songsContents post]
-      let song = Song
-            { 
-              songTitle = songsContents post
-            }
-      atomically $ do
-        oldSongs <- readTVar songs
-        let newSongs = song : oldSongs
-        writeTVar songs newSongs
-        return newSongs
-
-
-
-
-
 type TrackAPI =
          Get Text
-    --:<|> "tracks" :> Get [Track]
-    --:<|> "tracks" :> ReqBody PostTrack :> Post [Track]
-    :<|> "songs" :> Get [Song]
+    :<|> "tracks" :> Get [Track]
+    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
 
 
 trackAPI :: Proxy TrackAPI
@@ -215,12 +165,11 @@ trackAPI =
     Proxy
 
 
-serverTrack :: Text -> TVar [Song] -> Server TrackAPI
-serverTrack home songs =
+serverTrack :: Server TrackAPI
+serverTrack home tracks =
          return home
-    --:<|> getTracks tracks
-    --:<|> postTrack tracks
-    :<|> getSongs songs
+    :<|> getTracks tracks
+    :<|> postTrack tracks
 
 
 
@@ -234,6 +183,5 @@ main = do
                  lookup "TUTORIAL_HOME" env
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
-    songs <- emptySong
     tracks <- emptyTracks
-    run port $ serve trackAPI $ serverTrack home songs
+    run port $ serve trackAPI $ serverTrack home tracks
