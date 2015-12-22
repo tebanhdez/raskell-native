@@ -86,6 +86,11 @@ server home notes =
 
 
 type API = "tracks" :> TrackAPI
+
+
+generalAPI :: Proxy API
+generalAPI =
+    Proxy
       
 server :: Server API
 server = trackServer
@@ -102,4 +107,4 @@ main = do
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
-    run port $ serve API $ server
+    run port $ serve generalAPI $ server
