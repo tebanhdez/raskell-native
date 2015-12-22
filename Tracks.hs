@@ -80,7 +80,7 @@ postTrack tracks post =
               trackId = trackId,
               requestId = "1234-1234-1234",
               matches = L.concat (getMatches trackId),
-              performance = Performance {information = "some information here"}
+              performance = Performance {information = "some information goes here"}
             }
       atomically $ do
         oldTracks <- readTVar tracks
@@ -89,7 +89,10 @@ postTrack tracks post =
         return newTracks
 
 
-type TrackAPI = Get [Track] :<|> ReqBody 'PostTrack :> Post
+type TrackAPI = 
+         Get Text
+    :<|> "tracks" :> Get [Track]
+    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
 
 
 trackAPI :: Proxy TrackAPI
