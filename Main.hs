@@ -78,22 +78,12 @@ noteAPI :: Proxy NoteAPI
 noteAPI =
     Proxy
 
-noteServer :: Text -> TVar [Note] -> Server NoteAPI
-noteServer home notes =
+server :: Text -> TVar [Note] -> Server NoteAPI
+server home notes =
          return home
     :<|> getNotes notes
     :<|> postNote notes
 
-
-type API = "tracks" :> TrackAPI
-
-
-generalAPI :: Proxy API
-generalAPI =
-    Proxy
-      
-server :: Server API
-server = trackServer
 
 
 
@@ -107,4 +97,4 @@ main = do
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
-    run port $ serve generalAPI $ server
+    run port $ serve trackAPI $ serverTrack home tracks
