@@ -154,6 +154,56 @@ postTrack tracks post =
         return newTracks
 
 
+
+
+
+
+
+data Song = Song
+    { 
+    songTitle :: Text
+    }
+  deriving (Generic, Show)
+instance ToJSON Song
+
+
+newtype PostSong = PostSong
+    { songsContents :: Text
+    }
+  deriving Show
+
+instance FromJSON PostSong where
+    parseJSON (Object o) = PostTrack <$> o .: "songTitle"
+    parseJSON _          = mzero
+
+
+emptySong :: IO (TVar [Song])
+emptySong =
+    newTVarIO []
+
+getSong :: MonadIO m => TVar [Song] -> m [Song]
+getSong songs =
+    liftIO $ readTVarIO songs
+
+postSong :: MonadIO m => TVar [Song] -> PostSong -> m [Song]
+postSong songs post =
+    liftIO $ do
+      T.putStrLn $ T.concat [songsContents post]
+      let song = Song
+            { 
+              songTitle = songsContents post
+            }
+      atomically $ do
+        oldSongs <- readTVar songs
+        let newSongs = song : oldSongs
+        writeTVar songs newSongs
+        return newSongs
+
+
+
+
+
+
 type TrackAPI =
          Get Text
     :<|> "tracks" :> Get [Track]
