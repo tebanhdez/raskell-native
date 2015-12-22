@@ -20,6 +20,16 @@ import qualified Data.List as L
 import Tracks
 import Notes
 
+
+type API = "notes" :> NoteAPI
+      :<|> "tracks" :> TrackAPI
+
+server :: Server API
+server home = 
+  tracks <- emptyTracks
+  notes <- emptyNotes
+  noteServer notes :<|> trackServer tracks
+
 main :: IO ()
 main = do
     hSetBuffering stdout LineBuffering
@@ -30,4 +40,4 @@ main = do
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
-    run port $ serve trackAPI $ trackServer home tracks
+    run port $ serve API $ server home
