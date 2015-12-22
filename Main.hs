@@ -205,8 +205,8 @@ postSong songs post =
 
 type TrackAPI =
          Get Text
-    :<|> "tracks" :> Get [Track]
-    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+    --:<|> "tracks" :> Get [Track]
+    --:<|> "tracks" :> ReqBody PostTrack :> Post [Track]
     :<|> "songs" :> Get [Song]
 
 
@@ -215,11 +215,11 @@ trackAPI =
     Proxy
 
 
-serverTrack :: Text -> TVar [Track] -> Server TrackAPI
-serverTrack home tracks songs =
+serverTrack :: Text -> TVar [Song] -> Server TrackAPI
+serverTrack home songs =
          return home
-    :<|> getTracks tracks
-    :<|> postTrack tracks
+    --:<|> getTracks tracks
+    --:<|> postTrack tracks
     :<|> getSongs songs
 
 
@@ -236,4 +236,4 @@ main = do
     --run port $ serve noteAPI $ server home notes
     songs <- emptySong
     tracks <- emptyTracks
-    run port $ serve trackAPI $ serverTrack home tracks songs
+    run port $ serve trackAPI $ serverTrack home songs
