@@ -30,7 +30,5 @@ main = do
                  lookup "TUTORIAL_HOME" env
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
-    --tracks <- emptyTracks
-    --run port $ serve trackAPI $ trackServer home tracks
-    songs <- emptySongs
+    tracks <- emptyTracks
     run port $ serve trackAPI $ trackServer home tracks
