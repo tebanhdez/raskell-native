@@ -19,16 +19,7 @@ import qualified Data.List as L
 
 import Tracks
 import Notes
-
-
-type API = "notes" :> NoteAPI
-      :<|> "tracks" :> TrackAPI
-
-server :: Server API
-server home = 
-  tracks <- emptyTracks
-  notes <- emptyNotes
-  noteServer notes :<|> trackServer tracks
+import Songs
 
 main :: IO ()
 main = do
@@ -39,5 +30,7 @@ main = do
                  lookup "TUTORIAL_HOME" env
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
-    tracks <- emptyTracks
-    run port $ serve API $ server home
+    --tracks <- emptyTracks
+    --run port $ serve trackAPI $ trackServer home tracks
+    songs <- emptySongs
+    run port $ serve songAPI $ songServer home songs
