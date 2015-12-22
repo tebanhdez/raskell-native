@@ -181,8 +181,8 @@ emptySong :: IO (TVar [Song])
 emptySong =
     newTVarIO []
 
-getSong :: MonadIO m => TVar [Song] -> m [Song]
-getSong songs =
+getSongs :: MonadIO m => TVar [Song] -> m [Song]
+getSongs songs =
     liftIO $ readTVarIO songs
 
 postSong :: MonadIO m => TVar [Song] -> PostSong -> m [Song]
@@ -203,11 +203,11 @@ postSong songs post =
 
 
 
-
 type TrackAPI =
          Get Text
     :<|> "tracks" :> Get [Track]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+    :<|> "songs" :> Get [Song]
 
 
 trackAPI :: Proxy TrackAPI
@@ -220,6 +220,7 @@ serverTrack home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
+    :<|> getSongs tracks
 
 
 
