@@ -164,7 +164,7 @@ postTrack tracks post =
 
 data Song = Song
   {
-    title : Text
+    title :: Text
   }
   deriving (Generic, Show)
 instance ToJSON Song
