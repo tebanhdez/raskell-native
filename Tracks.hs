@@ -100,8 +100,16 @@ trackAPI =
     Proxy
 
 
-trackServer :: Text -> TVar [Track] -> Server TrackAPI
+trackServer :: Server TrackAPI
 trackServer home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
+
+
+
+
+
+
+
+
