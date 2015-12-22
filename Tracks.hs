@@ -1,3 +1,6 @@
+module Tracks where
+
+
 import Control.Applicative
 import Control.Concurrent.STM
 import Control.Monad
@@ -16,9 +19,6 @@ import System.IO
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import qualified Data.List as L
-
-module Tracks where
-
 
 ----
 -- Tracks
