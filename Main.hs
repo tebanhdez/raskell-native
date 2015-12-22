@@ -88,7 +88,7 @@ server home notes =
 -- Tracks
 ----
 
-getMatches :: Text -> Match
+
 getMatches trackId = return [Match {title = "title 1", probability = 0.5},Match {title = "title 2", probability = 0.3}]                     
 
 data Match = Match
@@ -144,14 +144,10 @@ postTrack tracks post =
             { 
               trackId = trackId,
               requestId = tracksContents post,
-              matches = (getMatches trackId),
+              matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
-      atomically $ do
-        oldTracks <- readTVar tracks
-        let newTracks = track : oldTracks
-        writeTVar tracks newTracks
-        return newTracks
+      return newTracks
 
 
 type TrackAPI =
