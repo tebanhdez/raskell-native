@@ -39,7 +39,7 @@ newtype PostSong = PostSong
   deriving Show
 
 instance FromJSON PostSong where
-    parseJSON (Object o) = PostTrack <$> o .: "songTitle"
+    parseJSON (Object o) = PostSong <$> o .: "songTitle"
     parseJSON _          = mzero
 
 
@@ -51,7 +51,7 @@ getSongs :: MonadIO m => TVar [Song] -> m [Song]
 getSongs songs =
     liftIO $ readTVarIO songs
 
-postSong :: MonadIO m => TVar [Song] -> PostTrack -> m [Song]
+postSong :: MonadIO m => TVar [Song] -> PostSong -> m [Song]
 postSong songs post =
     liftIO $ do
       iso <- getISO8601DateTime
