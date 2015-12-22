@@ -78,8 +78,8 @@ noteAPI :: Proxy NoteAPI
 noteAPI =
     Proxy
 
-server :: Text -> TVar [Note] -> Server NoteAPI
-server home notes =
+noteServer :: Text -> TVar [Note] -> Server NoteAPI
+noteServer home notes =
          return home
     :<|> getNotes notes
     :<|> postNote notes
