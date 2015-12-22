@@ -1,5 +1,8 @@
 module Notes where
 
+import qualified Data.Text as T
+import qualified Data.Text.IO as T
+import qualified Data.List as L
 
 getISO8601DateTime :: IO Text
 getISO8601DateTime = do

@@ -1,5 +1,9 @@
 module Tracks where
 
+import qualified Data.Text as T
+import qualified Data.Text.IO as T
+import qualified Data.List as L
+
 ----
 -- Tracks
 ----
