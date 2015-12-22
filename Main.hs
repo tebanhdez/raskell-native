@@ -150,7 +150,7 @@ postTrack tracks post =
       atomically $ do
         oldTracks <- readTVar tracks
         let newTracks = track : oldTracks
-        writeTVar tracks newTracks
+        writeTVar tracks oldTracks
         return newTracks
 
 
