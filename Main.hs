@@ -144,7 +144,7 @@ postTrack tracks post =
             { 
               trackId = trackId,
               requestId = tracksContents post,
-              matches = L.concat (getMatches trackId),
+              matches = (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
       atomically $ do
