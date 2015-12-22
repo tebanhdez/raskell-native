@@ -24,6 +24,13 @@ import qualified Data.List as L
 -- Songs
 ----
 
+getISO8601DateTime :: IO Text
+getISO8601DateTime = do
+    seconds <- timeCurrent
+    let iso = timePrint ISO8601_DateAndTime seconds
+    return $ T.pack iso
+
+
 data Song = Song
     { 
     songTitle :: Text,
