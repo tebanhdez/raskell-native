@@ -95,7 +95,7 @@ type TrackAPI ty=
     :<|> "tracks" :> ReqBody PostTrack :> Post [ty]
 
 
-trackAPI :: Proxy (TrackAPI Track)
+trackAPI :: Proxy (TrackAPI ty)
 trackAPI =
     Proxy
 
