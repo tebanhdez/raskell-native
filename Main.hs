@@ -173,7 +173,7 @@ newtype PostSong = PostSong
   deriving Show
 
 instance FromJSON PostSong where
-    parseJSON (Object o) = PostTrack <$> o .: "songTitle"
+    parseJSON (Object o) = PostSong <$> o .: "songTitle"
     parseJSON _          = mzero
 
 
