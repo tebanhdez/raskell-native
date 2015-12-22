@@ -143,14 +143,14 @@ postTrack tracks post =
       let track = Track
             { 
               trackId = trackId,
-              requestId = tracksContents post,
+              requestId = "1234-1234-1234",
               matches = L.concat (getMatches trackId),
               performance = Performance {information = "some information here"}
             }
       atomically $ do
         oldTracks <- readTVar tracks
         let newTracks = track : oldTracks
-        writeTVar tracks oldTracks
+        writeTVar tracks newTracks
         return newTracks
 
 
