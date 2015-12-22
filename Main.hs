@@ -148,9 +148,9 @@ postTrack tracks post =
               performance = Performance {information = "some information here"}
             }
       atomically $ do
-        oldTracks <- readTVar tracks
-        let newTracks = track : oldTracks
-        writeTVar tracks newTracks
+        
+        let newTracks = track
+        writeTVar track newTracks
         return newTracks
 
 
