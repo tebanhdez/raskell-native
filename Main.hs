@@ -119,7 +119,7 @@ instance ToJSON Track
 
 data Song = Song
     { 
-    title :: Text
+    songTitle :: Text
     }
   deriving (Generic, Show)
 instance ToJSON Song
