@@ -90,8 +90,7 @@ postTrack tracks post =
 
 
 type TrackAPI = 
-         Get Text
-    :<|> "tracks" :> Get [Track]
+         "tracks" :> Get [Track]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
 
 
@@ -104,13 +103,4 @@ trackServer :: Text -> TVar [Track] -> Server TrackAPI
 trackServer home tracks =
          return home
     :<|> getTracks tracks
-    :<|> postTrack tracks
-
-
-
-
-
-
-
-
-    
+    :<|> postTrack tracks 
