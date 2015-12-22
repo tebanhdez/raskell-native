@@ -176,6 +176,7 @@ type TrackAPI =
          Get Text
     :<|> "tracks" :> Get [Track]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+    :<|> "tracks" :> ReqBody PostRequest :> Post [Track]
 
 
 trackAPI :: Proxy TrackAPI
