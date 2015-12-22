@@ -84,6 +84,15 @@ server home notes =
     :<|> postNote notes
 
 
+
+----
+-- Index
+----
+
+
+
+
+
 ----
 -- Tracks
 ----
@@ -135,8 +144,8 @@ getTracks :: MonadIO m => TVar [Track] -> m [Track]
 getTracks tracks =
     liftIO $ readTVarIO tracks
 
-postRequest :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
-postRequest tracks post =
+postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
+postTrack tracks post =
     liftIO $ do
       T.putStrLn $ T.concat [tracksContents post]
       let trackId = tracksContents post
@@ -153,35 +162,31 @@ postRequest tracks post =
         writeTVar tracks oldTracks
         return newTracks
 
-postTrack :: MonadIO m => TVar [Track] -> PostTrack -> m [Track]
-postTrack tracks post =
-    liftIO $ do
-      T.putStrLn $ T.concat [tracksContents post]
-      let trackId = tracksContents post
-      let track = Track
-            { 
-              trackId = trackId,
-              requestId = "1234-1234-1234",
-              matches = L.concat (getMatches trackId),
-              performance = Performance {information = "some information here"}
-            }
-      atomically $ do
-        oldTracks <- readTVar tracks
-        let newTracks = track : oldTracks
-        writeTVar tracks newTracks
-        return newTracks
-
+data Song = Song
+  {
+    title : Text
+  }
+  deriving (Generic, Show)
+instance ToJSON Song
 
 type TrackAPI =
          Get Text
     :<|> "tracks" :> Get [Track]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
-    :<|> "tracks" :> ReqBody PostRequest :> Post [Track]
+    :<|> "getSongList" :> Get [Song]
 
 
 trackAPI :: Proxy TrackAPI
 trackAPI =
     Proxy
+
+emptySongs :: IO (TVar [Song])
+emptySongs =
+    newTVarIO []
+
+getSongs :: MonadIO m => TVar [Song] -> m [Song]
+getSongs songs =
+    liftIO $ readTVarIO songs
 
 
 serverTrack :: Text -> TVar [Track] -> Server TrackAPI
@@ -189,7 +194,7 @@ serverTrack home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
-    :<|> postRequest tracks
+    :<|> getSongList songs
 
 
 
