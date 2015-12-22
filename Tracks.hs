@@ -89,14 +89,14 @@ postTrack tracks post =
         return newTracks
 
 
-type TrackAPI = 
-         "tracks" :> Get [Track]
-    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+type TrackAPI ty= 
+         Get Text
+    :<|> "tracks" :> Get [ty]
+    :<|> "tracks" :> ReqBody PostTrack :> Post [ty]
 
 
 trackAPI :: Proxy TrackAPI
-trackAPI =
-    Proxy
+trackAPI = TrackAPI Track
 
 
 trackServer :: Text -> TVar [Track] -> Server TrackAPI
