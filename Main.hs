@@ -10,8 +10,6 @@ import           Data.Monoid
 import           Data.Proxy
 import           Data.Text
 import           GHC.Generics
-import           Network.Wai
-import           Network.Wai.Handler.Warp
 
 import           Servant
 
