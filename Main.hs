@@ -85,6 +85,11 @@ server home notes =
     :<|> postNote notes
 
 
+type API = "tracks" :> TrackAPI
+      
+server :: Server API
+server = trackServer
+
 
 
 main :: IO ()
@@ -97,4 +102,4 @@ main = do
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
-    run port $ serve trackAPI $ serverTrack home tracks
+    run port $ serve API $ server

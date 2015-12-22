@@ -24,7 +24,6 @@ import qualified Data.List as L
 -- Tracks
 ----
 
-
 getMatches trackId = return [Match {title = "title 1", probability = 0.5},Match {title = "title 2", probability = 0.3}]                     
 
 data Match = Match
@@ -101,9 +100,8 @@ trackAPI =
     Proxy
 
 
-serverTrack :: Text -> TVar [Track] -> Server TrackAPI
-serverTrack home tracks =
+trackServer :: Text -> TVar [Track] -> Server TrackAPI
+trackServer home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
-
