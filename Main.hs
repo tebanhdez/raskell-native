@@ -21,6 +21,8 @@ import Tracks
 import Notes
 import Songs
 
+
+{-
 main :: IO ()
 main = do
     hSetBuffering stdout LineBuffering
@@ -32,3 +34,27 @@ main = do
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
     run port $ serve trackAPI $ trackServer home tracks
+
+-}
+
+
+type GeneralAPI = 
+	"testAPI1" :> test1API
+	--"testAPI2" :> test2API
+
+server :: server GeneralAPI
+server = test1Server -- :<|> test2Server
+
+app ::Application
+app = serve generalAPI server
+
+runServer :: Port -> IO()
+runServer port = run port app
+
+main :: IO()
+main = runServer 8080
+
+
+
+
+
