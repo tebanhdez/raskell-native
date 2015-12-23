@@ -17,9 +17,7 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import qualified Data.List as L
 
-import Tracks
-import Notes
-import Songs
+import Test1
 
 
 {-
