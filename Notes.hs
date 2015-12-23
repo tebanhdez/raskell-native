@@ -80,8 +80,13 @@ noteAPI :: Proxy NoteAPI
 noteAPI =
     Proxy
 
+<<<<<<< HEAD
 noteServer :: Text -> TVar [Note] -> Server NoteAPI
 noteServer home notes =
+=======
+server :: Text -> TVar [Note] -> Server NoteAPI
+server home notes =
+>>>>>>> 28317c8d8653fb2c0e89ab837a7de10d44badbd1
          return home
     :<|> getNotes notes
     :<|> postNote notes

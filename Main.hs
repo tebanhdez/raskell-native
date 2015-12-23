@@ -17,6 +17,7 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import qualified Data.List as L
 
+<<<<<<< HEAD
 import Test1
 
 
@@ -56,3 +57,20 @@ main = runServer 8080
 
 
 
+=======
+import Tracks
+import Notes
+import Songs
+
+main :: IO ()
+main = do
+    hSetBuffering stdout LineBuffering
+    env <- getEnvironment
+    let port = maybe 8080 read $ lookup "PORT" env
+        home = maybe "Welcome to Haskell on Heroku" T.pack $
+                 lookup "TUTORIAL_HOME" env
+    --notes <- emptyNotes
+    --run port $ serve noteAPI $ server home notes
+    tracks <- emptyTracks
+    run port $ serve trackAPI $ trackServer home tracks
+>>>>>>> 28317c8d8653fb2c0e89ab837a7de10d44badbd1

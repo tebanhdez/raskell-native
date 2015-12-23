@@ -80,7 +80,11 @@ postTrack tracks post =
               trackId = trackId,
               requestId = "1234-1234-1234",
               matches = L.concat (getMatches trackId),
+<<<<<<< HEAD
               performance = Performance {information = "some information here"}
+=======
+              performance = Performance {information = "some information goes here"}
+>>>>>>> 28317c8d8653fb2c0e89ab837a7de10d44badbd1
             }
       atomically $ do
         oldTracks <- readTVar tracks
@@ -89,7 +93,11 @@ postTrack tracks post =
         return newTracks
 
 
+<<<<<<< HEAD
 type TrackAPI =
+=======
+type TrackAPI = 
+>>>>>>> 28317c8d8653fb2c0e89ab837a7de10d44badbd1
          Get Text
     :<|> "tracks" :> Get [Track]
     :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
@@ -104,4 +112,8 @@ trackServer :: Text -> TVar [Track] -> Server TrackAPI
 trackServer home tracks =
          return home
     :<|> getTracks tracks
+<<<<<<< HEAD
     :<|> postTrack tracks
+=======
+    :<|> postTrack tracks 
+>>>>>>> 28317c8d8653fb2c0e89ab837a7de10d44badbd1
