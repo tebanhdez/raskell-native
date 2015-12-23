@@ -101,7 +101,7 @@ trackAPI =
 
 
 trackServer :: Text -> TVar [Track] -> Server TrackAPI
-serverTrack home tracks =
+trackServer home tracks =
          return home
     :<|> getTracks tracks
     :<|> postTrack tracks
