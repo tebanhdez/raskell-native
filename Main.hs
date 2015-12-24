@@ -1,27 +1,42 @@
-import Control.Applicative
 import Control.Concurrent.STM
-import Control.Monad
-import Control.Monad.IO.Class
-import Data.Aeson
-import Data.Hourglass
 import Data.Proxy
 import Data.Text
-import GHC.Generics
 import Network.Wai.Handler.Warp
 import Servant
 import System.Environment
-import System.Hourglass
 import System.IO
 
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
-import qualified Data.List as L
 
-<<<<<<< HEAD
-import Test1
+import Tracks
+import Songs
+import Performance
 
 
-{-
+
+type GeneralAPI = 
+         Get Text
+    :<|> "tracks" :> Get [Track]
+    :<|> "tracks" :> ReqBody PostTrack :> Post [Track]
+    :<|> "songs" :> Get [Song]
+    :<|> "songs" :> ReqBody PostSong :> Post [Song]
+    :<|> "performance" :> Capture "requestId" Text :> Get Track
+
+
+generalAPI :: Proxy GeneralAPI
+generalAPI =
+    Proxy
+
+server :: Text -> TVar [Track] -> TVar [Song] -> Server GeneralAPI
+server home tracks songs =
+         return home
+    :<|> getTracks tracks
+    :<|> postTrack tracks 
+    :<|> getSongs songs
+    :<|> postSong songs
+    :<|> getPerformance tracks
+
+
 main :: IO ()
 main = do
     hSetBuffering stdout LineBuffering
@@ -32,23 +47,10 @@ main = do
     --notes <- emptyNotes
     --run port $ serve noteAPI $ server home notes
     tracks <- emptyTracks
-    run port $ serve trackAPI $ trackServer home tracks
+    songs <- emptySongs
+    run port $ serve generalAPI $ server home tracks songs
 
--}
 
 
-type GeneralAPI = 
-	"testAPI1" :> test1API
-	--"testAPI2" :> test2API
 
-server :: server GeneralAPI
-server = test1Server -- :<|> test2Server
 
-app ::Application
-app = serve generalAPI server
-
-runServer :: Port -> IO()
-runServer port = run port app
-
-main :: IO()
-main = runServer 8080
